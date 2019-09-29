@@ -1,12 +1,12 @@
 # Web Exploitation
 
 * cereal hacker 1
-* cereal hacker 2
+* [cereal hacker 2](./cereal-hacker-2/README.md)
 * Client-side-again
 * dont-use-client-side
-* Empire1
-* Empire2
-* Empire3
+* [Empire1](./Empire1/README.md)
+* [Empire2](./Empire2/README.md)
+* [Empire3](./Empire3/README.md)
 * GLHF
 * Insp3ct0r
 * Irish-Name-Repo 1
