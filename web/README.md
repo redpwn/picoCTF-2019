@@ -2,7 +2,7 @@
 
 * cereal hacker 1
 * [cereal hacker 2](./cereal-hacker-2/README.md)
-* Client-side-again
+* [Client-side-again](./Client-side-again/README.md)
 * dont-use-client-side
 * [Empire1](./Empire1/README.md)
 * [Empire2](./Empire2/README.md)

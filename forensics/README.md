@@ -16,7 +16,7 @@
 * m00nwalk2
 * pastaAAA
 * shark on wire 1
-* shark on wire 2
+* [shark on wire 2](./shark-on-wire-2/README.md)
 * So Meta
 * unzip
 * WebNet0
