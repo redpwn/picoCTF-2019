@@ -51,3 +51,7 @@ In short, the chunk header is applicable only when the previous-in-use flag is 0
 +0x170 |   next chunk                         |
        +--------------------------------------+
 ```
+
+Note that the null byte overflow allows us to change the size of the next chunk. We can then free the chunk again, putting it in a new tcache bin. Because the same chunk is put into two different tcache bins, we don't trigger double free. Afterwards, we can simply retrieve the chunk from the bin and edit the fd pointer. 
+
+This novel exploit, also known as the House of Poortho, allows us to bypass the new protections against double free in glibc 2.29. 

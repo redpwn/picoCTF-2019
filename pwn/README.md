@@ -4,7 +4,7 @@
 * CanaRy
 * GoT
 * handy-shellcode
-* Heap overflow
+* [Heap overflow](./heap-overflow/README.md)
 * L1im1tL355
 * leap-frog
 * messy-malloc
@@ -19,9 +19,8 @@
 * rop64
 * SecondLife
 * seed-sPRiNG
-* sice\_cream
+* [sice\_cream](./sice-cream/README.md)
 * slippery-shellcode
 * stringzz
-* zero\_to\_hero
-* Ghost\_Diary
-
+* [zero\_to\_hero](./zero_to_hero/README.md)
+* [Ghost\_Diary](./ghost-diary/README.md)
