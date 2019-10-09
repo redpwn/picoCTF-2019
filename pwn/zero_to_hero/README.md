@@ -14,9 +14,35 @@ The issue is that the binary uses libc 2.29, which patches the double free vulne
 
 Googling common exploits in libc 2.29 didn't help because they involved the use of unsorted bin and/or fastbin, and the checks on chunk size and slot count restricted allocations to tcache.
 
-The vulnerability is that read() overwrites the first byte of the next chunk header with a null byte. By asking for a chunk divisible by 0x8 but not 0x10 and triggering the vuln, the size of the next chunk changes. When the next chunk is freed again, it will be placed into a separate tcache bin, and the double free patch only checks for chunks within the same list.
+The vulnerability is that read() overwrites the first byte of the next chunk header with a null byte. If the next chunk has a size header with least significant byte not equal to 0x00, the size of the next chunk changes. 
 
-Everything is self-explanatory from here. Once we get double free, we overwrite `__free_hook` with the win function.
+Before
+```
+        +-------------------+------------------+
+current |        ...        |      0x51        |
+        +--------------------------------------+
+        |                AAAAAAAA              |
+        +-------------------+------------------+
+ next   |     AAAAAAAA      |      0x171       |
+        +--------------------------------------+
+        |                BBBBBBBB              |
+        +--------------------------------------+
+```
+
+After
+```
+        +-------------------+------------------+
+current |        ...        |      0x51        |
+        +--------------------------------------+
+        |                AAAAAAAA              |
+        +-------------------+------------------+
+ next   |     AAAAAAAA      |      0x100       |
+        +--------------------------------------+
+        |                BBBBBBBB              |
+        +--------------------------------------+
+```
+
+Assuming that we have freed the next chunk alri'eady, when it is freed again, it will be placed into a separate tcache bin, bypassing the double free patch which only checks for chunks within the same bin. From here, we can control the `fd` pointer of the tcache chunk, doing a standard [tcache poisoning](https://github.com/shellphish/how2heap/blob/master/glibc_2.26/tcache_poisoning.c). To finish, we overwrite `__free_hook` with the win function.
 
 ------------
 
@@ -51,7 +77,3 @@ In short, the chunk header is applicable only when the previous-in-use flag is 0
 +0x170 |   next chunk                         |
        +--------------------------------------+
 ```
-
-Note that the null byte overflow allows us to change the size of the next chunk. We can then free the chunk again, putting it in a new tcache bin. Because the same chunk is put into two different tcache bins, we don't trigger double free. Afterwards, we can simply retrieve the chunk from the bin and edit the fd pointer. 
-
-This novel exploit, also known as the House of Poortho, allows us to bypass the new protections against double free in glibc 2.29. 
