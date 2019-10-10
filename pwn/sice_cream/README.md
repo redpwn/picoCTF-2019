@@ -15,8 +15,12 @@ Compiled by GNU CC version 5.4.0 20160609.
         GNU Libidn by Simon Josefsson
 
 $ checksec sice_cream
-RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable  FILE
-Full RELRO      Canary found      NX enabled    No PIE          No RPATH   RW-RUNPATH   No Symbols      Yes     0               2       sice_cream
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+    RUNPATH:  './'
 
 ```
 
