@@ -1,10 +1,10 @@
 # Binary Exploitation
 
-* [AfterLife](./afterlife//README.md)
+* [AfterLife](./afterlife)
 * CanaRy
 * GoT
 * handy-shellcode
-* [Heap overflow](./heap-overflow/README.md)
+* [Heap overflow](./heap-overflow)
 * L1im1tL355
 * leap-frog
 * messy-malloc
@@ -17,9 +17,9 @@
 * practice-run-1
 * rop32
 * rop64
-* [SecondLife](./secondlife/README.md)
+* [SecondLife](./secondlife)
 * seed-sPRiNG
-* [sice\_cream](./sice-cream/README.md)
+* [sice\_cream](./sice_cream/README.md)
 * slippery-shellcode
 * stringzz
 * [zero\_to\_hero](./zero_to_hero/README.md)
