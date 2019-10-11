@@ -1,11 +1,11 @@
 # Forensics
 
-* B1g\_Mac
+* [B1g\_Mac](./B1g_Mac/README.md)
 * c0rrupt
 * extensions
 * Glory of the Garden
 * investigation\_encoded\_1
-* investigation\_encoded\_2
+* [investigation\_encoded\_2](./investigation_encoded_2/README.md)
 * [Investigative Reversing 0](./Investigative-Reversing-0/README.md)
 * [Investigative Reversing 1](./Investigative-Reversing-1/README.md)
 * Investigative Reversing 2

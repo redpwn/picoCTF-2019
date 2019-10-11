@@ -4,7 +4,7 @@ redpwn's writeups for picoCTF 2019
 
 ## Table of Contents
 
-* [Cryptography](./cryptography/README.md)
+* [Cryptography](./crypto/README.md)
 * [Forensics](./forensics/README.md)
 * [General Skills](./general/README.md)
 * [Binary Exploitation](./pwn/README.md)

@@ -1,6 +1,6 @@
 # Binary Exploitation
 
-* AfterLife
+* [AfterLife](./afterlife//README.md)
 * CanaRy
 * GoT
 * handy-shellcode
@@ -17,10 +17,10 @@
 * practice-run-1
 * rop32
 * rop64
-* SecondLife
+* [SecondLife](./secondlife/README.md)
 * seed-sPRiNG
 * [sice\_cream](./sice-cream/README.md)
 * slippery-shellcode
 * stringzz
 * [zero\_to\_hero](./zero_to_hero/README.md)
-* [Ghost\_Diary](./ghost-diary/README.md)
+* [Ghost\_Diary](./ghost_diary/README.md)
